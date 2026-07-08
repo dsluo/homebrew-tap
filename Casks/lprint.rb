@@ -17,5 +17,6 @@ cask "lprint" do
 
   pkg "lprint-#{version}-macos.pkg"
 
-  uninstall pkgutil: "org.msweet.lprint"
+  uninstall launchctl: "LPrint, a Label Printer Application",
+            pkgutil:   "org.msweet.lprint"
 end
