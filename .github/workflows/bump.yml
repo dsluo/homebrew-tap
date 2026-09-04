@@ -25,5 +25,6 @@ jobs:
         uses: Homebrew/actions/bump-packages@main
         with:
           token: ${{ secrets.HOMEBREW_BUMP_TOKEN }}
+          formulae: dsluo/tap/openshell
           casks: dsluo/tap/lprint
           fork: false
