@@ -11,6 +11,11 @@ class Openshell < Formula
   version "0.0.89"
   license "Apache-2.0"
 
+  livecheck do
+    url "https://github.com/NVIDIA/OpenShell/releases"
+    strategy :github_releases
+  end
+
   depends_on macos: :big_sur
   depends_on arch: :arm64
 
