@@ -103,8 +103,20 @@ class Openshell < Formula
     (var/"openshell/gateway").mkpath
     (var/"openshell/vm-driver").mkpath
     (var/"log/openshell").mkpath
-    system bin/"openshell-gateway", "generate-certs", "--output-dir", var/"openshell/tls",
-           "--server-san", "host.openshell.internal"
+
+    # Regenerating the CA on upgrade would invalidate the mTLS certificates
+    # already registered with `openshell gateway add`, so only generate a
+    # missing or incomplete set. The certificates do not expire.
+    tls_files = %w[
+      ca.crt ca.key
+      server/tls.crt server/tls.key
+      client/tls.crt client/tls.key
+      jwt/signing.pem jwt/public.pem jwt/kid
+    ]
+    unless tls_files.all? { |tls_file| (var/"openshell/tls"/tls_file).exist? }
+      system bin/"openshell-gateway", "generate-certs", "--output-dir", var/"openshell/tls",
+             "--server-san", "host.openshell.internal"
+    end
 
     entitlements = var/"openshell/openshell-driver-vm.entitlements.plist"
     entitlements.atomic_write <<~XML
