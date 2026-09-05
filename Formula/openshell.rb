@@ -16,8 +16,8 @@ class Openshell < Formula
     strategy :github_releases
   end
 
-  depends_on macos: :big_sur
   depends_on arch: :arm64
+  depends_on macos: :big_sur
 
   resource "openshell-gateway" do
     url "https://github.com/NVIDIA/OpenShell/releases/download/v0.0.116/openshell-gateway-aarch64-apple-darwin.tar.gz"
@@ -103,7 +103,8 @@ class Openshell < Formula
     (var/"openshell/gateway").mkpath
     (var/"openshell/vm-driver").mkpath
     (var/"log/openshell").mkpath
-    system bin/"openshell-gateway", "generate-certs", "--output-dir", var/"openshell/tls", "--server-san", "host.openshell.internal"
+    system bin/"openshell-gateway", "generate-certs", "--output-dir", var/"openshell/tls",
+           "--server-san", "host.openshell.internal"
 
     entitlements = var/"openshell/openshell-driver-vm.entitlements.plist"
     entitlements.atomic_write <<~XML
