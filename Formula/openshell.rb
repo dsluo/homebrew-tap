@@ -99,27 +99,39 @@ class Openshell < Formula
     chmod 0755, libexec/"openshell-gateway-homebrew-service"
   end
 
-  def post_install
-    (var/"openshell/gateway").mkpath
-    (var/"openshell/vm-driver").mkpath
-    (var/"log/openshell").mkpath
+  post_install_steps do
+    mkdir_p "openshell/gateway", base: :var
+    mkdir_p "openshell/vm-driver", base: :var
+    mkdir_p "log/openshell", base: :var
 
     # Regenerating the CA on upgrade would invalidate the mTLS certificates
     # already registered with `openshell gateway add`, so only generate a
-    # missing or incomplete set. The certificates do not expire.
-    tls_files = %w[
-      ca.crt ca.key
-      server/tls.crt server/tls.key
-      client/tls.crt client/tls.key
-      jwt/signing.pem jwt/public.pem jwt/kid
-    ]
-    unless tls_files.all? { |tls_file| (var/"openshell/tls"/tls_file).exist? }
-      system bin/"openshell-gateway", "generate-certs", "--output-dir", var/"openshell/tls",
-             "--server-san", "host.openshell.internal"
-    end
+    # missing or incomplete set. The certificates do not expire. Each
+    # declarative guard tests a single path, so testing the whole set takes
+    # a shell step.
+    run "/bin/sh", args: ["-c", <<~'SH']
+      set -eu
+      tls_dir="{{var}}/openshell/tls"
+      tls_files="
+      ca.crt
+      ca.key
+      server/tls.crt
+      server/tls.key
+      client/tls.crt
+      client/tls.key
+      jwt/signing.pem
+      jwt/public.pem
+      jwt/kid
+      "
+      for tls_file in ${tls_files}; do
+        if [ ! -e "${tls_dir}/${tls_file}" ]; then
+          exec "{{bin}}/openshell-gateway" generate-certs \
+            --output-dir "${tls_dir}" --server-san host.openshell.internal
+        fi
+      done
+    SH
 
-    entitlements = var/"openshell/openshell-driver-vm.entitlements.plist"
-    entitlements.atomic_write <<~XML
+    write_file "openshell/openshell-driver-vm.entitlements.plist", <<~XML, base: :var
       <?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
       <plist version="1.0">
@@ -130,7 +142,10 @@ class Openshell < Formula
       </plist>
     XML
 
-    system "/usr/bin/codesign", "--entitlements", entitlements, "--force", "-s", "-", libexec/"openshell-driver-vm"
+    run "/usr/bin/codesign", args: [
+      "--entitlements", "{{var}}/openshell/openshell-driver-vm.entitlements.plist",
+      "--force", "-s", "-", "{{libexec}}/openshell-driver-vm"
+    ]
   end
 
   service do
