@@ -7,8 +7,8 @@
 class Openshell < Formula
   desc "Safe, private runtime for autonomous AI agents"
   homepage "https://github.com/NVIDIA/OpenShell"
-  url "https://github.com/NVIDIA/OpenShell/releases/download/v0.0.116/openshell-aarch64-apple-darwin.tar.gz"
-  sha256 "e582f2374053bebac8e6aaeb4a369931b7d4bb97bd55055e2c02e85502627e22"
+  url "https://github.com/NVIDIA/OpenShell/releases/download/v0.1.3/openshell-aarch64-apple-darwin.tar.gz"
+  sha256 "2eda3676aa85ff60551b403847090942e119c89f37c84d1635ac166c6b879826"
   license "Apache-2.0"
 
   livecheck do
@@ -20,8 +20,8 @@ class Openshell < Formula
   depends_on :macos
 
   resource "openshell-gateway" do
-    url "https://github.com/NVIDIA/OpenShell/releases/download/v0.0.116/openshell-gateway-aarch64-apple-darwin.tar.gz"
-    sha256 "f192d3d737c125264e13ef73458541df2ca6a9eb2fa599736a7f2587d5d2ce8d"
+    url "https://github.com/NVIDIA/OpenShell/releases/download/v0.1.3/openshell-gateway-aarch64-apple-darwin.tar.gz"
+    sha256 "a0cff0699f4a608a644805dbbf898c42caa59856274ff3cc2cdd6b3af4bacabe"
 
     livecheck do
       formula :parent
@@ -29,8 +29,8 @@ class Openshell < Formula
   end
 
   resource "openshell-driver-vm" do
-    url "https://github.com/NVIDIA/OpenShell/releases/download/v0.0.116/openshell-driver-vm-aarch64-apple-darwin.tar.gz"
-    sha256 "8024b8443cfee668b74dce3d348e308d3f576e624ef36af3bc20f79451e96cff"
+    url "https://github.com/NVIDIA/OpenShell/releases/download/v0.1.3/openshell-driver-vm-aarch64-apple-darwin.tar.gz"
+    sha256 "56e321f990741ca5585f5229e37c178f541b0c38029351fe59b72a36c1c750d4"
 
     livecheck do
       formula :parent
