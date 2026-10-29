@@ -1,9 +1,9 @@
 cask "opendeck" do
   arch arm: "aarch64", intel: "x64"
 
-  version "2.14.0"
-  sha256 arm:   "5130d4e65e5511deffdf0f07665d615d9607abff63562bdcae07a6040fda0f8e",
-         intel: "ae3125aa05d34db2c14c5a400a4b4e9b6a13706b8a7043c1a430b8fee7ad04d7"
+  version "2.14.2"
+  sha256 arm:   "cb8e4592210e895abfaa92bc7093a07df4a7caa6e45745f711a5c466cb014da4",
+         intel: "b5f9c75f1a8c0503726bb8f56815b659148c1f80808ef72b1f17a49e10e44b27"
 
   url "https://github.com/nekename/OpenDeck/releases/download/v#{version}/OpenDeck_#{version}_#{arch}.dmg"
   name "OpenDeck"
